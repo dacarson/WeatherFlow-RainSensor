@@ -1,3 +1,5 @@
+![Github License](https://img.shields.io/github/license/dacarson/WeatherFlowApi) ![Github Release](https://img.shields.io/github/v/release/dacarson/WeatherFlowApi?display_name=tag)
+
 # WeatherFlow-RainSensor
 Arduino sketch that uses WeatherFlow broadcast rain data to control rain sensor on an automatic irrigation system.
 
