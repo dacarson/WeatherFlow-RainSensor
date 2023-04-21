@@ -8,3 +8,5 @@ Used a [relay shield](https://www.wemos.cc/en/latest/d1_mini_shield/relay.html) 
 Used a [DC Power Shield](https://www.wemos.cc/en/latest/d1_mini_shield/dc_power.html) on the Wemos, the Wemos can be powered from the irrigation system with an [AC/DC converter](https://www.amazon.com/BeElion-Convertor-Current-Surveillance-Security/dp/B01JD6ASF8/) to convert it's 24VAC to DC and attaching to DC Power Shield (7-24V). Allowing the whole unit to fit inside the automatic irrigation system enclosure.
 
 The amount of rain required to trigger sensor, and the amount of time before the rain sensor is disabled is controllable via a web page served by the sketch. 
+
+<img width="995" alt="Configuration - Status - Testing page" src="https://user-images.githubusercontent.com/44933987/233520104-23c1b004-bbb3-4550-92ae-3fabb81b4c4c.png">
