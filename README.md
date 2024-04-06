@@ -13,7 +13,8 @@ Used a [DC Power Shield](https://www.wemos.cc/en/latest/d1_mini_shield/dc_power.
 
 The amount of rain required to trigger sensor, and the amount of time before the rain sensor is disabled is controllable via a web page served by the sketch. 
 
-<img width="995" alt="Configuration - Status - Testing page" src="https://user-images.githubusercontent.com/44933987/233520104-23c1b004-bbb3-4550-92ae-3fabb81b4c4c.png">
+![Configuration](https://github.com/dacarson/WeatherFlow-RainSensor/assets/44933987/6037dd06-60a9-4c86-8183-cc08467b8c6f)
+![Status & Testing](https://github.com/dacarson/WeatherFlow-RainSensor/assets/44933987/2fb8c9b0-ac74-41dc-956f-6ce5004bc80c)
 
 ## Setup
 Change the lines in `WeatherFlow-RainSensor.ino` to contain your WiFi SSID and Password:
