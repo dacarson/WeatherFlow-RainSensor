@@ -1,0 +1,56 @@
+body {
+	font-family: Arial, Helvetica, Sans-Serif;
+	Color: #E7FFDC;
+	background-image: url('bkgnd.jpg');
+	background-repeat: no-repeat;
+	background-position: top center;
+	background-color: #003111;
+}
+a {
+	Color: #E7FFDC;
+	font-size: 12px;
+}
+h1 {
+	text-align: center;
+	margin-top: 48px;
+	padding: 0px;
+	margin-bottom: 0px;
+}
+h2 {
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+	margin-bottom: 20px;
+}
+.data-box {
+	display: flex;
+	justify-content: center;
+	
+}
+.center-data {
+	width: 400px;
+	height: 280px;
+	padding: 10px;
+	position: relative;
+	display: none;
+}
+.link-box {
+	width: 77px;
+	margin: 27px;
+	text-align: center;
+	background-color: #003311;
+	
+}
+.center-data.show {
+	display: block;
+}
+.bottom-right-button {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+pre {
+	position: absolute;
+	left: 5px;
+	bottom: 0px;
+}

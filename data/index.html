@@ -1,0 +1,125 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherFlow Rain Sensor</title>
+<link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <h1>IoT Rain Sensor</h1>
+<div class="data-box">
+<div id="configuration" class="center-data" style="display: block;">
+    <h2>Configuration</h2>
+    <p>
+    <p>
+    <form>
+        <B>
+            <label for="rainFallAmount">24hr Rainfall Threshold (mm):</label> 
+                <select name=rainFallAmount>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option selected>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                </select>
+            <p>
+               <label for="dryingTime">Delay Before Turning Back On (hours):</label>
+                    <select name=dryingTime>
+                        <option>1</option>
+                        <option>2</option>
+                        <option selected>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option>12</option>
+                        <option>13</option>
+                        <option>14</option>
+                        <option>15</option>
+                        <option>16</option>
+                        <option>17</option>
+                        <option>18</option>
+                        <option>19</option>
+                        <option>20</option>
+                        <option>21</option>
+                        <option>22</option>
+                        <option>23</option>
+                    </select>
+        </b>
+        </p>
+        <button type="submit" value="Update" class="bottom-right-button">Save Settings</button>
+    </form>
+</div>
+
+<div id="status" class="center-data" style="display: none;">
+    <h2>Status</h2>
+	Rain Sensor: Not Triggered<br>
+        Rain detected: 
+        <span id='rainStartTime'></span><br>
+    <script>
+    var date = new Date(1712356308 * 1000);
+    var time = date.toLocaleTimeString();
+    var d = date.toDateString();
+    document.getElementById('rainStartTime').innerHTML = d + ' ' + time;
+    </script>
+    Rainfall: Last hour: 0.00mm, Last 24hrs: 0.02mm
+<p>
+    <hr>
+    <h2>Testing</h2>
+        Send Rain start event 
+        <button type="button" onclick="rainstart()">Now</button>
+    <br>
+    <script>
+    function rainstart() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/rainstart", true);
+        xhr.send(null);
+    }
+    </script>
+        Send observation event with rain total 3.8 
+        <button type="button" onclick="obstest()">Now</button>
+        <script>
+        function obstest() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/obstest", true);
+            xhr.send(null);
+        }
+        </script>
+    <br>
+        Reset all stored rain data 
+        <button type="button" onclick="reset()">Reset</button>
+        <script>
+        function reset() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/reset", true);
+            xhr.send(null);
+        }
+        </script>
+    <p>
+    <pre>Compiled: May  4 2023, 15:01:25, GCC: 10.3.0</pre>
+    </p>
+</div>
+</div>
+<div class="data-box">
+<div class="link-box">
+<a href="#" id="swapLink">Status</a>
+</div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
+
