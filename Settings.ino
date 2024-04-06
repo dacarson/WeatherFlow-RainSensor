@@ -20,7 +20,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <ESP_EEPROM.h>
+#if defined (ESP8266)
+    #include <ESP_EEPROM.h>
+#endif
 
 // EEPROM stored data
 const int RainSettings::EEPROMStorageSize = 64;
@@ -33,18 +35,24 @@ RainSettings::RainSettings() {
   _rainFallAmount = 12; //(5 - 20mm)
   _dryingTime = 3; //(1 - 23 hrs)
 
+#if defined (ESP8266)
   // Check to see if there are any in EEPROM
   EEPROM.begin(EEPROMStorageSize);
+#endif
   loadFromEEPROM();
 }
 
 RainSettings::~RainSettings() {
+#if defined (ESP8266)
   EEPROM.end();
+#endif
 }
+
 
 // See if there are settings stored in the EEPROM
 // and if so, restore the values
 void RainSettings::loadFromEEPROM() {
+#if defined (ESP8266)
   int tempRainFallAmount;
   EEPROM.get(RainFallAmountOffset, tempRainFallAmount);
   if (tempRainFallAmount > 0) {
@@ -57,6 +65,7 @@ void RainSettings::loadFromEEPROM() {
   } else {
     Serial.println("Using default Rain fall amount and drying time");
   }
+#endif
 }
 
 /*
@@ -64,11 +73,14 @@ void RainSettings::loadFromEEPROM() {
   Rely on ESP_EEPROM to handle only writing if values have changed
 */
 void RainSettings::saveToEEPROM() {
+#if defined (ESP8266)
   EEPROM.put(RainFallAmountOffset, _rainFallAmount);
   EEPROM.put(DryingTimeOffset, _dryingTime);
   if (EEPROM.commit())
     Serial.println("Updated settings in EEPROM");
+#endif
 }
+
 
 /* 
   Amount of rainfall needed over 24hr period to trigger sensor
