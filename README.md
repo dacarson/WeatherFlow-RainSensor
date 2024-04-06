@@ -21,6 +21,7 @@ Change the lines in `WeatherFlow-RainSensor.ino` to contain your WiFi SSID and P
 const char *ssid     = "your_wifi_ssid";
 const char *password = "your_wifi_password";
 ```
+Make sure you upload the web files to a [LittleFS](https://github.com/earlephilhower/arduino-littlefs-upload) file system.
 
 ## License
 This library is licensed under [MIT License](https://opensource.org/license/mit/)

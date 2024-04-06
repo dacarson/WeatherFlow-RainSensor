@@ -44,6 +44,8 @@ to DC Power Shield (7-24V)
   #include <ESPmDNS.h>
 #endif
 
+#include <FS.h>
+#include <LittleFS.h>
 #include <WiFiClient.h>
 #include <WiFiUdp.h>
 #include <NTPClient.h>
@@ -202,6 +204,42 @@ void resetRainData() {
   server.client().stop();
 }
 
+void sendCSS() {
+    File file = LittleFS.open("/main.css", "r");
+    if(file){
+      server.streamFile(file, "text/css");
+      file.close();
+    } else {
+      Serial.println("Failed to open file for reading");
+      server.send(404, "text/plain", "File not found");
+    }
+    server.client().stop();
+}
+
+void sendBackgroundImage() {
+    File file = LittleFS.open("/bkgnd.jpg", "r");
+    if(file){
+      server.streamFile(file, "image/jpeg");
+      file.close();
+    } else {
+      Serial.println("Failed to open file for reading");
+      server.send(404, "text/plain", "File not found");
+    }
+    server.client().stop();
+}
+
+void sendScript() {
+    File file = LittleFS.open("/main.js", "r");
+    if(file){
+      server.streamFile(file, "text/javascript");
+      file.close();
+    } else {
+      Serial.println("Failed to open file for reading");
+      server.send(404, "text/plain", "File not found");
+    }
+    server.client().stop();
+}
+
 void setup() {
   pinMode ( led, OUTPUT );
   pinMode ( relayPin, OUTPUT);
@@ -221,6 +259,10 @@ void setup() {
 	Serial.print ( F("IP address: ") );
 	Serial.println ( WiFi.localIP() );
 
+  if(!LittleFS.begin()){
+        Serial.println("LittleFS Mount Failed");
+  }
+
   // Start the timeclient
   timeClient.begin();
   // update every 7 days (1000ms * 60mins * 60hrs * 24hrs * 5days)
@@ -238,6 +280,9 @@ void setup() {
   server.on ("/rainstart", rainStartTest);
   server.on ("/obstest", observationTest);
   server.on ("/reset", resetRainData);
+  server.on ("/main.css", sendCSS);
+  server.on ("/bkgnd.jpg", sendBackgroundImage);
+  server.on ("/main.js", sendScript);
   server.begin();
 	Serial.println ( "HTTP server started" );
 

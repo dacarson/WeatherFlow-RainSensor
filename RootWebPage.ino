@@ -58,15 +58,20 @@ void handleRoot() {
 // Send HTML header
   server.sendContent(F("<html>\
   <head>\
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\
     <title>WeatherFlow Rain Sensor</title>\
-    <style>\
-      body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
-    </style>\
+    <link rel=\"stylesheet\" href=\"main.css\">\
   </head>\
 "));
 
 // Send current configuation
-server.sendContent(F("<body><h1>Configuation</h1><p><p><form><B>Rain fall needs to exceed <i>"));
+server.sendContent(F("<body>\
+<h1>IoT Rain Sensor</h1>\
+  <div class='data-box'>\
+  <div id='configuration' class='center-data' style='display: block;'>\
+  <h2>Configuration</h2>\
+"));
+server.sendContent(F("<p><p><form><B><label for=\"rainFallAmount\">24hr Rainfall Threshold (mm):</label>"));
 server.sendContent(F("<select name=rainFallAmount>"));
 for (int i = 5; i < 21; i++) {
   if (i == settings.rainFallAmount())
@@ -78,7 +83,7 @@ for (int i = 5; i < 21; i++) {
   server.sendContent(F("</option>"));
 }
 server.sendContent(F("</select>"));
-server.sendContent(F("</i>mm over last 24hrs to trigger rain sensor</p><p> Rain must have dropped below trigger for <i>"));
+server.sendContent(F("<p> <label for=\"dryingTime\">Delay Before Turning Back On (hours):</label>"));
 server.sendContent(F("<select name=dryingTime>"));
 for (int i = 1; i < 24; i++) {
   if (i == settings.dryingTime())
@@ -90,43 +95,44 @@ for (int i = 1; i < 24; i++) {
   server.sendContent(F("</option>"));
 }
 server.sendContent(F("</select>"));
-server.sendContent(F("</i>hrs to reset rain sensor (drying time)</b></p>"));
-server.sendContent(F("<input type=\"submit\" value=\"Update\"/></form> "));
+server.sendContent(F("</b>"));
+server.sendContent(F("<button type='submit' value=\"Update\" class=\"bottom-right-button\">Save Settings</button></form>"));
 
+server.sendContent(F("</div><div id=\"status\" class=\"center-data\" style=\"display: none;\">"));
 // Send current status
-server.sendContent(F("<hr><h1>Status</h1><p>Rain Sensor: "));
+server.sendContent(F("<h2>Status</h2>Rain Sensor: "));
 if (relayOffTime == -1) {
   server.sendContent(F("Not "));
 }
-server.sendContent(F("Triggered</p>"));
+server.sendContent(F("Triggered<br>"));
 if (relayOffTime > 0) {
-  server.sendContent(F("<p>Rain sensor will reset at: <span id='relayOffTime'></span></p>"));
+  server.sendContent(F("Rain sensor will reset at: <span id='relayOffTime'></span><br>"));
   server.sendContent(F("<script> var date = new Date("));
   sprintf(temp, "%ld", relayOffTime);
   server.sendContent(temp);
   server.sendContent(F(" * 1000); var time = date.toLocaleTimeString();"));
   server.sendContent(F("document.getElementById('relayOffTime').innerHTML = time;</script>"));
 }
-server.sendContent(F("<p>Last time rain was detected: <span id='rainStartTime'></span></p>"));
+server.sendContent(F("Rain detected: <span id='rainStartTime'></span><br>"));
 server.sendContent(F("<script> var date = new Date("));
 sprintf(temp, "%ld", rainStartEpoch);
 server.sendContent(temp);
 server.sendContent(F(" * 1000); var time = date.toLocaleTimeString(); var d = date.toDateString();"));
 server.sendContent(F("document.getElementById('rainStartTime').innerHTML = d + ' ' + time;</script>"));
-server.sendContent(F("<p>Rain fall total in last hour: "));
+server.sendContent(F("Rainfall: Last hour: "));
 sprintf(temp, "%.2f", rainInHour[currentHour]);
 server.sendContent(temp);
-server.sendContent(F("mm</p><p>Rain fall total in last 24hrs: "));
+server.sendContent(F("mm, Last 24hrs: "));
 float total = 0;
 for (int hour = 0; hour < 24; hour++)
     total += rainInHour[hour];
 sprintf(temp, "%.2f", total);
 server.sendContent(temp);  
-server.sendContent(F("mm</p><hr>"));
+server.sendContent(F("mm<p><hr>"));
 
 // Testing
 // Send current status
-server.sendContent(F("<h1>Testing</h1><p>Send Rain start event <button type=\"button\" onclick=\"rainstart()\">Now</button></p>"));
+server.sendContent(F("<h2>Testing</h2>Send Rain start event <button type=\"button\" onclick=\"rainstart()\">Now</button><br>"));
 server.sendContent(F("<script>\
 function rainstart()\
 {\
@@ -136,7 +142,7 @@ function rainstart()\
 }\
 </script>"));
 
-server.sendContent(F("<p>Send observation event with rain total 3.8 <button type=\"button\" onclick=\"obstest()\">Now</button> "));
+server.sendContent(F("Send observation event with rain total 3.8 <button type=\"button\" onclick=\"obstest()\">Now</button><br>"));
 server.sendContent(F("<script>\
 function obstest()\
 {\
@@ -146,7 +152,7 @@ function obstest()\
 }\
 </script>"));
 
-server.sendContent(F("<p>Reset all stored rain data <button type=\"button\" onclick=\"reset()\">Reset</button> "));
+server.sendContent(F("Reset all stored rain data <button type=\"button\" onclick=\"reset()\">Reset</button><br>"));
 server.sendContent(F("<script>\
 function reset()\
 {\
@@ -163,7 +169,15 @@ function reset()\
   server.sendContent(F(__TIME__));
   server.sendContent( F(", GCC: "));
   server.sendContent(F(__VERSION__));
-  server.sendContent(F("</pre></p></body></html>"));
+  server.sendContent(F("</pre></p>\
+  </div></div>\
+  <div class=\"data-box\">\
+    <div class=\"link-box\">\
+      <a href=\"#\" id=\"swapLink\">Status</a>\
+    </div>\
+  </div>\
+  <script src=\"main.js\"></script>\
+  </body></html>"));
   server.client().stop();
 
 }
