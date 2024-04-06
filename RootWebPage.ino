@@ -37,10 +37,8 @@ extern long rainStartEpoch;
 extern float rainInHour[];
 extern int currentHour; // so we can see if we have moved into a new hour
 
-// Amount of rainfall needed over 24hr period
-extern int rainFallAmount; //(5 - 20mm)
-// The time after it has stopped raining before the sprinklers can turn back on
-extern int dryingTime; //(1 - 23 hrs)
+// Rain Settings
+extern RainSettings settings;
 
 void handleRoot() {
   char temp[100];
@@ -48,15 +46,10 @@ void handleRoot() {
   // Handle any arguements passed in
   if (server.args() > 1) {
     String rainFallAmountStr = server.arg("rainFallAmount");
-    int tempRainFall = rainFallAmountStr.toInt();
-    if (tempRainFall > 4 && tempRainFall < 21) {
-      rainFallAmount = tempRainFall;
-    }
+    settings.setRainFallAmount(rainFallAmountStr.toInt());
+
     String dryingTimeStr = server.arg("dryingTime");
-    int tempDryingTime = dryingTimeStr.toInt();
-    if (tempDryingTime > 0 && tempDryingTime < 24) {
-      dryingTime = tempDryingTime;
-    }
+    settings.setDryingTime(dryingTimeStr.toInt());
   }
 
   server.setContentLength(CONTENT_LENGTH_UNKNOWN);
@@ -76,7 +69,7 @@ void handleRoot() {
 server.sendContent(F("<body><h1>Configuation</h1><p><p><form><B>Rain fall needs to exceed <i>"));
 server.sendContent(F("<select name=rainFallAmount>"));
 for (int i = 5; i < 21; i++) {
-  if (i == rainFallAmount)
+  if (i == settings.rainFallAmount())
     server.sendContent(F("<option selected>"));
   else
     server.sendContent(F("<option>"));
@@ -88,7 +81,7 @@ server.sendContent(F("</select>"));
 server.sendContent(F("</i>mm over last 24hrs to trigger rain sensor</p><p> Rain must have dropped below trigger for <i>"));
 server.sendContent(F("<select name=dryingTime>"));
 for (int i = 1; i < 24; i++) {
-  if (i == dryingTime)
+  if (i == settings.dryingTime())
     server.sendContent(F("<option selected>"));
   else
     server.sendContent(F("<option>"));

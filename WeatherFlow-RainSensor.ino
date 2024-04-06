@@ -47,7 +47,8 @@ to DC Power Shield (7-24V)
 #include <WiFiClient.h>
 #include <WiFiUdp.h>
 #include <NTPClient.h>
-#include "WeatherFlowUdp.h"
+#include <WeatherFlowUdp.h>
+#include "Settings.h"
 
 // Pins
 const int led = LED_BUILTIN;
@@ -57,8 +58,12 @@ const int led = LED_BUILTIN;
   const int relayPin = 22;
 #endif
 
+// WiFi Credentials
 const char *ssid     = "your_wifi_name";
 const char *password = "your_wifi_password";
+
+// Construct a global settings object
+RainSettings settings;
 
 // We'll use time provided by Network Time Protocol to get EpochTime 
 // and use that with WeatherFlowData as that uses EpochTime too.
@@ -91,11 +96,6 @@ int currentHour; // so we can see if we have moved into a new hour
 // for longer than dryingTime, turn off sensor
 long relayOffTime = -1; //EpochTime
 
-// Default Settings
-// Amount of rainfall needed over 24hr period
-int rainFallAmount = 12; //(5 - 20mm)
-// The time after it has stopped raining before the sprinklers can turn back on
-int dryingTime = 3; //(1 - 23 hrs)
 
 // Callback for when new WeatherFlow data arrives
 void handleNewObject(WeatherFlowData::Object obj, void* context) {
@@ -141,7 +141,7 @@ void handleNewObject(WeatherFlowData::Object obj, void* context) {
     for (int i = 0; i < 24; i++) {
       totalAccumulated += rainInHour[i];
     }
-    if (totalAccumulated >= rainFallAmount)
+    if (totalAccumulated >= settings.rainFallAmount())
       enableRainSensor();
 
     if (relayOffTime > 0 && relayOffTime <= timeClient.getEpochTime())
@@ -153,7 +153,7 @@ void handleNewObject(WeatherFlowData::Object obj, void* context) {
 void enableRainSensor() {
   Serial.println("Rain Detected: Yes");
   // Calculate the new rain sensing off time
-  relayOffTime = timeClient.getEpochTime() + (60 * 60 * dryingTime);
+  relayOffTime = timeClient.getEpochTime() + (60 * 60 * settings.dryingTime());
   digitalWrite(relayPin, HIGH); // turn on relay
   digitalWrite (led, LOW);
 }
