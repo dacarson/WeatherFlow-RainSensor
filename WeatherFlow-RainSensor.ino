@@ -204,42 +204,6 @@ void resetRainData() {
   server.client().stop();
 }
 
-void sendCSS() {
-    File file = LittleFS.open("/main.css", "r");
-    if(file){
-      server.streamFile(file, "text/css");
-      file.close();
-    } else {
-      Serial.println("Failed to open file for reading");
-      server.send(404, "text/plain", "File not found");
-    }
-    server.client().stop();
-}
-
-void sendBackgroundImage() {
-    File file = LittleFS.open("/bkgnd.jpg", "r");
-    if(file){
-      server.streamFile(file, "image/jpeg");
-      file.close();
-    } else {
-      Serial.println("Failed to open file for reading");
-      server.send(404, "text/plain", "File not found");
-    }
-    server.client().stop();
-}
-
-void sendScript() {
-    File file = LittleFS.open("/main.js", "r");
-    if(file){
-      server.streamFile(file, "text/javascript");
-      file.close();
-    } else {
-      Serial.println("Failed to open file for reading");
-      server.send(404, "text/plain", "File not found");
-    }
-    server.client().stop();
-}
-
 void setup() {
   pinMode ( led, OUTPUT );
   pinMode ( relayPin, OUTPUT);
@@ -280,9 +244,10 @@ void setup() {
   server.on ("/rainstart", rainStartTest);
   server.on ("/obstest", observationTest);
   server.on ("/reset", resetRainData);
-  server.on ("/main.css", sendCSS);
-  server.on ("/bkgnd.jpg", sendBackgroundImage);
-  server.on ("/main.js", sendScript);
+
+  server.serveStatic ("/main.css", LittleFS, "/main.css");
+  server.serveStatic ("/bkgnd.jpg", LittleFS, "/bkgnd.jpg");
+  server.serveStatic ("/main.js", LittleFS, "/main.js");
   server.begin();
 	Serial.println ( "HTTP server started" );
 
