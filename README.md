@@ -1,4 +1,4 @@
-![Github License](https://img.shields.io/github/license/dacarson/WeatherFlowApi) ![Github Release](https://img.shields.io/github/v/release/dacarson/WeatherFlowApi?display_name=tag)
+![Github License](https://img.shields.io/github/license/dacarson/WeatherFlow-RainSensor) ![Github Release](https://img.shields.io/github/v/release/dacarson/WeatherFlow-RainSensor?display_name=tag)
 
 # WeatherFlow-RainSensor
 
